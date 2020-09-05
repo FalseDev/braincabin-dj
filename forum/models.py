@@ -2,13 +2,17 @@ from django.db import models
 
 
 class User(models.Model):
-    username = models.CharField('Unique username', max_length=20)
-    password = models.CharField('Hashed password', max_length=78)
+    username = models.CharField('Unique username', max_length=20, unique=True)
     name = models.CharField('User\'s name', max_length=30)
+
+    password = models.CharField('Hashed password', max_length=78)
+    email = models.EmailField('Email of the user', unique=True)
 
     reputation = models.IntegerField('Reputation of user', default=0)
     join_date = models.DateField(auto_now_add=True)
 
+    def __str__(self):
+        return self.username
 
 class Profile(models.Model):
     user = models.ForeignKey('User', on_delete=models.CASCADE)
@@ -28,6 +32,8 @@ class Profile(models.Model):
     status = models.CharField(choices=status_choices,max_length=9)
     institute = models.CharField(max_length=30)
 
+    def __str__(self):
+        return f"{self.user.username}'s profile"
 
 class Question(models.Model):
     title = models.CharField(max_length=30)
@@ -38,13 +44,20 @@ class Question(models.Model):
     upvote_count = models.IntegerField(default=0)
     downvote_count = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.title
+
 
 class Answer(models.Model):
     answered_by = models.ForeignKey('User', on_delete=models.CASCADE)
     question = models.ForeignKey('Question', on_delete=models.CASCADE)
+    text = models.CharField('The answer itself', max_length=2000)
 
     upvote_count = models.IntegerField(default=0)
     downvote_count = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.text[0:10]}{'...' if len(self.text)>10 else ''}"
 
 
 class AnswerVote(models.Model):
