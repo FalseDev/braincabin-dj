@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container mt-4">
+        <main>
+            {% if questions %}
+                {% for question in questions %}
+                    {{ question.title }}
+                {% endfor %}
+            {% else %}
+                Sorry, no questions yet :(
+            {% endif %}
+        </main>
+    </div>
+
+{% endblock content %}

@@ -11,17 +11,11 @@ class Query(ObjectType):
     question = Field(typeDefs.QuestionType, id=Int(required=True))
     user = Field(typeDefs.UserType, id=Int(required=True))
 
-    me = String()
-
     resolve_all_questions = resolvers.resolve_all_questions
     resolve_all_profiles = resolvers.resolve_all_profiles
 
     resolve_question = resolvers.resolve_question
     resolve_user = resolvers.resolve_user
-
-    def resolve_me(self,info):
-        return info.context.session['F_LOGIN']
-
 
 class Mutation(ObjectType):
     register = Field(typeDefs.UserType, name=String(required=True), username=String(

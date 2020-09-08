@@ -1,17 +1,23 @@
-from forum.models import Question, User, Profile, Answer
-from django.contrib.auth import hashers
+from django.contrib.auth import authenticate, login, logout
+from forum.models import Question, Answer
+from users.models import Profile
+from users.models import User
+
 
 def resolve_register(root, info, name, username, email, password):
-    return User.objects.create(name=name, username=username,
-                       email=email, password=hashers.make_password(password))
+    return User.objects.create_user(username, email=email, password=password, name=name)
 
 
 def resolve_login(root, info, username, password):
-    user = User.objects.get(username=username)
-    if hashers.check_password(password, user.password):
-        info.context.session['F_LOGIN'] = user.username
-        return user
-    return None
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        login(info.context, user)
+    return user
+
+
+def resolve_logout(root, info):
+    logout(info.context)
+
 
 def resolve_question(root, info, id):
     return Question.objects.get(id=id)

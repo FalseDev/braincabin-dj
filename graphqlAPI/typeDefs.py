@@ -1,5 +1,7 @@
 from graphene_django import DjangoObjectType
-from forum.models import Question, User, Profile, Answer
+from forum.models import Question, Answer
+from users.models import Profile, User
+from graphene import List
 
 
 class AnswerType(DjangoObjectType):
@@ -25,4 +27,13 @@ class QuestionType(DjangoObjectType):
 class UserType(DjangoObjectType):
     class Meta:
         model = User
-        fields = ("username", "name", "reputation", "join_date")
+        fields = ("username", "name", "reputation", "join_date", "profile")
+
+    top_questions = List(QuestionType)
+    top_answers = List(AnswerType)
+
+    def resolve_top_questions(self, info):
+        return self.question_set.order_by('upvote_count')[:5]
+
+    def resolve_top_answers(self, info):
+        return self.answer_set.order_by('upvote_count')[:5]
