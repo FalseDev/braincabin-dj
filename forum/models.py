@@ -5,7 +5,9 @@ from users.models import User
 class Question(models.Model):
     title = models.CharField(max_length=30)
     description = models.CharField(max_length=2000)
+
     asked_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    asked_on = models.DateField(auto_now_add=True)
 
     answer_count = models.IntegerField(default=0)
     upvote_count = models.IntegerField(default=0)
@@ -17,6 +19,8 @@ class Question(models.Model):
 
 class Answer(models.Model):
     answered_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    answered_on = models.DateField(auto_now_add=True)
+
     question = models.ForeignKey('Question', on_delete=models.CASCADE)
     text = models.CharField('The answer itself', max_length=2000)
 

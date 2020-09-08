@@ -8,7 +8,8 @@ class AnswerType(DjangoObjectType):
     class Meta:
         model = Answer
         fields = ("text", "question", "answered_by",
-                  "upvote_count", "downvote_count")
+                  "upvote_count", "downvote_count",
+                  "answered_on")
 
 
 class ProfileType(DjangoObjectType):
@@ -21,7 +22,11 @@ class QuestionType(DjangoObjectType):
     class Meta:
         model = Question
         fields = ("id", "title", "description", "upvote_count",
-                  "downvote_count", "answer_count", "asked_by")
+                  "downvote_count", "answer_count", "asked_by",
+                  "asked_on")
+    answers = List(AnswerType)
+    def resolve_answers(self,info):
+       return self.answer_set.all()
 
 
 class UserType(DjangoObjectType):
