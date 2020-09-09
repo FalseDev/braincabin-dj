@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+    {% block content %}
+        <div class="container mt-4">
+            <div class="card mt-4">
+            <div class="card-header">
+                <span class="text-muted">Asked by: </span>
+                <a href="#" class="link">{{ object.asked_by.username }}</a>
+                <span class="text-muted"> On </span>
+                {{ object.asked_on }}
+            </div>
+                <div class="card-title nav-link mt-3">
+                    {{ object.title }}
+                </div>
+                <div class="card-body" id="target">{{ object.description }}</div>
+            </div>
+        </div>
+
+        <!-- Showdown JS Config -->
+        <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
+        <script defer>
+            const converter = new showdown.Converter()
+            const target = document.getElementById('target')
+            const html = converter.makeHtml(target.innerText)
+            target.innerHTML = html
+        </script>
+
+    {% endblock content %}

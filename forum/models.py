@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import User
+from django.urls import reverse
 
 
 class Question(models.Model):
@@ -15,6 +16,10 @@ class Question(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse("question-detail", kwargs={"pk": self.pk})
+    
 
 
 class Answer(models.Model):

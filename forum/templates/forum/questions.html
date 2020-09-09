@@ -4,12 +4,37 @@
         <main>
             {% if questions %}
                 {% for question in questions %}
-                    {{ question.title }}
+                    <div class="card mt-4">
+                        <a class="card-title nav-link mt-3" 
+                            href="{% url 'question-detail' question.pk %}">
+                            {{ question.title }}
+                        </a>
+                        <div class="card-body" id="question-{{ forloop.counter0 }}">{{ question.description }}</div>
+                        <div class="card-footer">
+                            <span class="text-muted">Asked by: </span>
+                            <a href="#" class="link">{{ question.asked_by.username }}</a>
+                            <span class="text-muted"> On </span>
+                            {{ question.asked_on }}
+                        </div>
+                    </div>
                 {% endfor %}
             {% else %}
-                Sorry, no questions yet :(
+                <div class="alert alert-danger container mt-4">Sorry, no questions yet :(</div>
             {% endif %}
         </main>
+
+        <!-- Showdown JS Config -->
+        <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
+        <script defer>
+            const converter = new showdown.Converter()
+            for (let i = 0; i < {{ questions|length }};i++){
+                const target = document.getElementById('question-' + i.toString())
+                const html = converter.makeHtml(target.innerText)
+                const onlyText = html.replace(/<[^>]*>?/gm, '')
+                target.innerHTML = onlyText
+            }
+        </script>
+
     </div>
 
 {% endblock content %}
