@@ -9,7 +9,7 @@
                             href="{% url 'question-detail' question.pk %}">
                             {{ question.title }}
                         </a>
-                        <div class="card-body" id="question-{{ forloop.counter0 }}">{{ question.description }}</div>
+                        <div class="card-body" id="question-{{ forloop.counter0 }}">{{ question.description|linebreaksbr }}</div>
                         <div class="card-footer">
                             <span class="text-muted">Asked by: </span>
                             <a href="#" class="link">{{ question.asked_by.username }}</a>

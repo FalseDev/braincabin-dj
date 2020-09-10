@@ -2,7 +2,8 @@
 {% load crispy_forms_filters %}
     {% block content %}
         <div class="container mt-4">
-            <div class="card mt-4">
+            
+            <div class="card mt-4 border-primary">
             <div class="card-header">
                 <span class="text-muted">Asked by: </span>
                 <a href="#" class="link">{{ object.asked_by.username }}</a>
@@ -12,17 +13,43 @@
                 <div class="card-title nav-link mt-3">
                     {{ object.title }}
                 </div>
-                <div class="card-body" id="target">{{ object.description }}</div>
+                <div class="card-body" id="target">
+                    {{ object.description|linebreaksbr }}
+                </div>
             </div>
+
+            {% for answer in object.answer_set.all %}
+                <div class="card mt-4 border-secondary">
+                    <div class="card-body" id="answer-{{ forloop.counter0 }}">
+                        {{ answer.text|linebreaksbr }}
+                    </div>
+                    <div class="card-footer">
+                        <span class="text-muted">Answered by: </span>
+                        <a href="#">{{ answer.answered_by.username }}</a>
+                        <span class="text-muted"> on {{ answer.answered_on }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+
         </div>
 
         <!-- Showdown JS Config -->
         <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
         <script defer>
             const converter = new showdown.Converter()
-            const target = document.getElementById('target')
-            const html = converter.makeHtml(target.innerText)
-            target.innerHTML = html
+            processMarkdown('target')
+
+            for (let i = 0; i < {{ object.answer_set.all|length }};i++){
+                processMarkdown('answer-' + i.toString())
+            }
+            
+            async function processMarkdown (targetID){
+                const target = document.getElementById(targetID)
+                const html = converter.makeHtml(target.innerText)
+                const onlyText = html
+                target.innerHTML = onlyText
+            }
+
         </script>
 
     {% endblock content %}

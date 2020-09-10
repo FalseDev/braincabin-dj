@@ -19,7 +19,7 @@ class Query(ObjectType):
 
 class Mutation(ObjectType):
     register = Field(typeDefs.UserType, name=String(required=True), username=String(
-        required=True), password=String(required=True), email=String(required=True))
+        required=True), password=String(required=True), email=String(required=True), date_of_birth=String(required=True))
     login = Field(typeDefs.UserType, username=String(
         required=True), password=String(required=True))
 
