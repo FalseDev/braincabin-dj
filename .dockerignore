@@ -1,0 +1,11 @@
+.venv
+.vscode
+pwa
+db.sqlite3
+Procfile
+runtime.txt
+**/__pycache__
+braincabin/.env
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py

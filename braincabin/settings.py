@@ -16,24 +16,16 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-env = environ.Env(
-    DEBUG=(bool,False),
-    HOST=(list,[])
-)
-
-environ.Env.read_env()
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = os.environ['DEBUG'] == 'True'
 
-ALLOWED_HOSTS = env('HOST')
+ALLOWED_HOSTS = os.environ['HOST'].split(',')
 
 
 # Application definition
@@ -90,12 +82,12 @@ WSGI_APPLICATION = 'braincabin.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': f'django.db.backends.{env("DB_TYPE")}',
-        'NAME': env("DATABASE_NAME",default= os.path.join(BASE_DIR, 'db.sqlite3')),
-        'USER': env("DATABASE_USER",default=''),
-        'PASSWORD': env("DATABASE_PASSWORD",default=''),
-        'HOST': env("DATABASE_HOST",default=''),
-        'PORT': env("DATABASE_PORT",default=''),
+        'ENGINE': os.environ['DATABASE_ENGINE'],
+        'NAME': os.environ['DATABASE_NAME'],
+        'USER': os.environ['DATABASE_USER'],
+        'PASSWORD': os.environ['DATABASE_PASSWORD'],
+        'HOST': os.environ['DATABASE_HOST'],
+        'PORT': os.environ['DATABASE_PORT'],
     }
 }
 
@@ -143,6 +135,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 AUTH_USER_MODEL = 'users.User'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'forum-questions'
 
 # STATICFILES_DIRS = (
