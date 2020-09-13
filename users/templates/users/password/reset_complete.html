@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container mt-4">
+        <div class="alert alert-info">
+            You're password has been successfully changed! 
+        </div>
+        <div class="d-flex justify-content-center">
+            <a href="{% url 'login' %}" class="btn btn-outline-info">Login Now</a>
+        </div>
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container mt-4">
+        <legend>Request Reset Password</legend>
+        <form method="post" class="form-group">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-outline-info btn-block">
+                Request Password Reset
+            </button>
+        </form>
+    </div>
+
+{% endblock content %}
