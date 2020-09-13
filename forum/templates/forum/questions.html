@@ -23,6 +23,33 @@
             {% endif %}
         </main>
 
+        {% if is_paginated %}
+            <div class="mt-4 mb-4 d-flex justify-content-center">
+                {% if page_obj.number > 1 %}
+                    <a href="?page=1" class="btn btn-outline-info mb-4">&lt;&lt;</a>
+                {% endif %}
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-info mb-4">&lt;</a>
+                {% endif %}
+
+                {% for page_no in page_obj.paginator.page_range %}
+                    {% if page_no == page_obj.number%}
+                        <button class="btn btn-info mb-4">{{page_no}}</button>
+                    {% elif page_no > page_obj.number|add:'-3' and page_no < page_obj.number|add:'3' %}
+                        <a href="?page={{ page_no }}" class="btn btn-outline-info mb-4">{{ page_no }}</a>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-info mb-4">&gt;</a>
+                {% endif %}
+                {% if page_obj.number != page_obj.paginator.num_pages  %}
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-info mb-4">&gt;&gt;</a>
+                {% endif %}
+
+            </div>
+        {% endif %}
+
         <!-- Showdown JS Config -->
         <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
         <script defer>

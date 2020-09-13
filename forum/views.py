@@ -8,6 +8,8 @@ class QuestionListView(ListView):
     model = Question
     template_name = 'forum/questions.html'
     context_object_name = 'questions'
+    paginate_by = 5
+    ordering = '-asked_on'
 
 class QuestionDetailView(DetailView):
     model = Question
