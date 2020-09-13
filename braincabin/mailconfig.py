@@ -6,8 +6,8 @@ try:
     EMAIL_BACKEND = environ['EMAIL_BACKEND']
     EMAIL_HOST = environ['EMAIL_HOST']
     EMAIL_PORT = int(environ['EMAIL_PORT'])
-    EMAIL_USE_TLS = environ['EMAIL_USE_TLS']
+    EMAIL_USE_TLS = environ['EMAIL_USE_TLS'] == 'True'
     EMAIL_HOST_USER = environ['EMAIL_HOST_USER']
     EMAIL_HOST_PASSWORD = environ['EMAIL_HOST_PASSWORD']
-except (KeyError, TypeError):
-    raise ImproperlyConfigured
+except (KeyError):
+    print('W: Mail config incomplete or empty')
