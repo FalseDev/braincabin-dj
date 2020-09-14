@@ -54,9 +54,9 @@ INSTALLED_APPS = [
     'graphene_django',
     'crispy_forms',
     'django_email_verification',
-    'users',
-    'forum',
-    'graphqlAPI'
+    'users.apps.UsersConfig',
+    'forum.apps.ForumConfig',
+    'graphqlAPI.apps.GraphqlapiConfig',
 ]
 
 MIDDLEWARE = [
