@@ -26,20 +26,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 try:
     SECRET_KEY = os.environ['SECRET_KEY']
 except KeyError:
-    SECRET_KEY = 'only-for-running-collectstatic'
-    print("W: Using default secret key")
+    SECRET_KEY = 'testing-and-building-key'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 try:
     DEBUG = os.environ['DEBUG'] == 'True'
 except KeyError:
     DEBUG = False
-    print("W: Dubug value not set, defaulting to False")
 
 try:
     ALLOWED_HOSTS = os.environ['HOST'].split(',')
 except KeyError:
     ALLOWED_HOSTS = ['localhost']
+
+EMAIL_PAGE_DOMAIN = ALLOWED_HOSTS[-1]
 
 # Application definition
 
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 
     'graphene_django',
     'crispy_forms',
+    'django_email_verification',
     'users',
     'forum',
     'graphqlAPI'
@@ -151,6 +152,11 @@ AUTH_USER_MODEL = 'users.User'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'forum-questions'
+
+EMAIL_ACTIVE_FIELD = 'is_active'
+EMAIL_MAIL_SUBJECT = 'Confirm your email to activate your braincabin account'
+EMAIL_MAIL_HTML = 'users/email/confirmation_email.html'
+EMAIL_PAGE_TEMPLATE = 'users/email/confirmed.html'
 
 # STATICFILES_DIRS = (
 #     os.path.join(BASE_DIR, 'static'),
