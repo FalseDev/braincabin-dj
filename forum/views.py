@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect, get_object_or_404, Http404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse, Http404
 from django.views.generic import ListView, CreateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.forms import Textarea
@@ -53,3 +54,39 @@ def create_answer(request, question_id):
         form = forms.AnswerCreationForm()
         question = get_object_or_404(Question, id=question_id)
     return render(request, 'forum/answer.html', {"form": form, "question": question})
+
+
+def vote(request, model_type, vote_type, action_type, pk):
+    if request.method != 'POST':
+        return JsonResponse({"success": False})
+
+    if request.user.is_anonymous:
+        return JsonResponse({"success": False})
+
+    if model_type == 'question':
+        model = Question
+    elif model_type == 'answer':
+        model = Answer
+    else:
+        return Http404()
+
+    op_object = get_object_or_404(model, pk=pk)
+
+    if vote_type == 'upvote':
+        vote_obj = op_object.downvotes
+        unvote_obj = op_object.upvotes
+    elif vote_type == 'downvote':
+        vote_obj = op_object.downvotes
+        unvote_obj = op_object.upvotes
+    else:
+        return Http404()
+
+    if action_type == 'add':
+        unvote_obj.remove(request.user)
+        vote_obj.add(request.user)
+    elif action_type == 'remove':
+        vote_obj.remove(requst.user)
+    else:
+        return Http404()
+
+    return JsonResponse({"success": True})
