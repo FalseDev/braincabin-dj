@@ -1,6 +1,7 @@
 .vscode
 staticfiles
 pwa
+static
 **/migrations/**
 !**/migrations
 !**/migrations/__init__.py

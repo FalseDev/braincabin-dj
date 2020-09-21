@@ -11,7 +11,10 @@ def register(request):
             sendConfirm(user)
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for user {username}!')
-            return redirect('login')
+            return redirect('confirm-mail-message')
     else:
         form = forms.UserRegisterForm()
     return render(request, 'users/register.html', {"form":form})
+
+def confirm_mail(request):
+    return render(request, 'users/confirm-mail-message.html')

@@ -158,9 +158,9 @@ EMAIL_MAIL_SUBJECT = 'Confirm your email to activate your braincabin account'
 EMAIL_MAIL_HTML = 'users/email/confirmation_email.html'
 EMAIL_PAGE_TEMPLATE = 'users/email/confirmed.html'
 
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'static'),
-# )
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 GRAPHENE = {
     "SCHEMA": "graphqlAPI.schema.schema"

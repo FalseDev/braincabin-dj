@@ -10,10 +10,6 @@ class Question(models.Model):
     asked_by = models.ForeignKey(User, on_delete=models.CASCADE)
     asked_on = models.DateField(auto_now_add=True)
 
-    answer_count = models.IntegerField(default=0)
-    upvote_count = models.IntegerField(default=0)
-    downvote_count = models.IntegerField(default=0)
-
     upvotes = models.ManyToManyField(
         User, related_name='ans_upvote', blank=True)
     downvotes = models.ManyToManyField(
@@ -33,9 +29,6 @@ class Answer(models.Model):
 
     question = models.ForeignKey('Question', on_delete=models.CASCADE)
     text = models.CharField('The answer itself', max_length=2000)
-
-    upvote_count = models.IntegerField(default=0)
-    downvote_count = models.IntegerField(default=0)
 
     upvotes = models.ManyToManyField(
         User, related_name='que_upvote', blank=True)

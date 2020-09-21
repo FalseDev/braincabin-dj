@@ -58,35 +58,39 @@ def create_answer(request, question_id):
 
 def vote(request, model_type, vote_type, action_type, pk):
     if request.method != 'POST':
-        return JsonResponse({"success": False})
+        return JsonResponse({"success": False,"errors":["Invalid request method"]})
 
     if request.user.is_anonymous:
-        return JsonResponse({"success": False})
+        return JsonResponse({"success": False,"errors":["You're not logged in"]})
 
     if model_type == 'question':
         model = Question
     elif model_type == 'answer':
         model = Answer
     else:
-        return Http404()
+        return JsonResponse({"success":True, "errors":["Invalid model"]})
 
-    op_object = get_object_or_404(model, pk=pk)
+    try:
+        op_object = model.objects.get(pk=pk)
+    except:
+        return JsonResponse({"success":False,"errors":["Invalid object id"]})
 
-    if vote_type == 'upvote':
+    if vote_type == 'downvote':
         vote_obj = op_object.downvotes
         unvote_obj = op_object.upvotes
-    elif vote_type == 'downvote':
-        vote_obj = op_object.downvotes
-        unvote_obj = op_object.upvotes
+    elif vote_type == 'upvote':
+        unvote_obj = op_object.downvotes
+        vote_obj = op_object.upvotes
     else:
-        return Http404()
+        return JsonResponse({"success":False, "errors":["Invalid vote type"]})
 
     if action_type == 'add':
         unvote_obj.remove(request.user)
         vote_obj.add(request.user)
     elif action_type == 'remove':
-        vote_obj.remove(requst.user)
+        unvote_obj.remove(request.user)
+        vote_obj.remove(request.user)
     else:
-        return Http404()
+        return JsonResponse({"success":False,"errors":["Invalid action type"]})
 
     return JsonResponse({"success": True})
