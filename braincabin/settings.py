@@ -147,20 +147,25 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
 AUTH_USER_MODEL = 'users.User'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'forum-questions'
 
+# Mail confirmation configuration
 EMAIL_ACTIVE_FIELD = 'is_active'
 EMAIL_MAIL_SUBJECT = 'Confirm your email to activate your braincabin account'
 EMAIL_MAIL_HTML = 'users/email/confirmation_email.html'
 EMAIL_PAGE_TEMPLATE = 'users/email/confirmed.html'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+SECURE_SSL_REDIRECT = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 GRAPHENE = {
     "SCHEMA": "graphqlAPI.schema.schema"
