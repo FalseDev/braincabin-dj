@@ -1,14 +1,18 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django_email_verification import sendConfirm
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from .models import User
 from . import forms
 
-class UsersList(ListView):
+class UserListView(ListView):
     model = User
     paginate_by = 18
     ordering = 'username'
+
+
+class UserDetailView(DetailView):
+    model = User
 
 
 def register(request):

@@ -45,7 +45,7 @@
                         </a>
                     </li>
 
-                    {% if user.is_authenticated %}
+                    {% if request.user.is_authenticated %}
                     
                     <li class="nav-item">
                         <a class="nav-link{% if request.resolver_match.url_name == 'logout' %} active{% endif %}" href="{% url 'logout' %}">
@@ -67,7 +67,7 @@
 
                 </ul>
                 <span style="color: white">
-                    {% if user.is_authenticated %} Hello, {{ user.name }} {% endif %}
+                    {% if request.user.is_authenticated %} Hello, {{ request.user.name }} {% endif %}
                 </span>
             </div>
         </nav>

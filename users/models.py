@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.urls import reverse
 
 
 class User(AbstractUser):
@@ -10,6 +11,16 @@ class User(AbstractUser):
     date_of_birth = models.DateField()
 
     REQUIRED_FIELDS = ['date_of_birth', 'name', 'email']
+
+    def top_questions(self, amount=5):
+        return self.question_set.order_by('upvotes')[:amount]
+
+    def top_answers(self, amount=5):
+        return self.answer_set.order_by('upvotes')[:amount]
+
+    def get_absolute_url(self):
+        return reverse("user-detail", kwargs={"pk": self.pk})
+    
 
 
 class Profile(models.Model):

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}{{object.username}} @ Braincabin{% endblock title %}
+
+{% block content %}
+<div class="container mt-4 mb-4">
+
+    <div class="d-flex justify-content-center">
+        <div class="col-sm-10 col-md-8 col-lg-6">
+            <div class="card mt-4 mb-4">
+                <div class="card-body d-flex justify-content-between">
+                    
+                    <div>
+                        <h4>{{ object.username }}</h4>
+                        {{object.name}}<br>
+                        {{object.reputation}}<span class="text-muted small"> points of reputation</span> 
+                    </div>
+
+                    <div>
+                        <div class="display">
+                            Status: {{object.profile.status|lower|capfirst}}<br>
+                            Institute: {{object.profile.institute|capfirst}}<br>
+                            Joined on: {{object.join_date}}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-md-12 col-lg-6">
+            <div class="card" style="height: 20rem;">
+                <div class="card-header">Top Questions</div>
+                <div class="card-body">
+                    {% with object.top_questions as questions %}
+                        {% if questions %}
+                            <ul class="list-group list-group-flush">
+                                {% for question in questions %}
+                                    <li class="list-group-item">
+                                        <a href="{{question.get_absolute_url}}">
+                                            {{question.title|truncatechars:30}}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            No questions yet.
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-lg-6">
+            <div class="card" style="height: 20rem;">
+                <div class="card-header">Top Answers</div>
+                <div class="card-body">
+                    {% with object.top_answers as answers %}
+                        {% if answers %}
+                            <ul class="list-group list-group-flush">
+                                {% for answer in answers %}
+                                    <li class="list-group-item">
+                                        <a href="{{answer.question.get_absolute_url}}">
+                                            {{answer.question.title|truncatechars:30}}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            No answers yet.
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}

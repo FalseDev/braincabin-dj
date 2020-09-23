@@ -10,8 +10,8 @@
         {% for object in object_list %}
 
             <div class="col-lg-6 col-xl-4 col-sm-10">
-                <div class="card mt-3 mb-3">
-                <div class="card-header">{{ object.username }}</div>
+                <div class="card mt-3 mb-3" style="height: 12rem;">
+                <div class="card-header"><a href="{{ object.get_absolute_url }}" class="link">{{ object.username }}</a></div>
                 <div class="card-body">
                     <h5 class="card-title">{{ object.name }}</h5>
                     <p class="card-text">
