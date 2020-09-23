@@ -1,7 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django_email_verification import sendConfirm
+from django.views.generic import ListView
+from .models import User
 from . import forms
+
+class UsersList(ListView):
+    model = User
+    paginate_by = 18
+    ordering = 'username'
+
 
 def register(request):
     if request.method == 'POST':

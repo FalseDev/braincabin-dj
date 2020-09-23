@@ -163,9 +163,9 @@ EMAIL_MAIL_SUBJECT = 'Confirm your email to activate your braincabin account'
 EMAIL_MAIL_HTML = 'users/email/confirmation_email.html'
 EMAIL_PAGE_TEMPLATE = 'users/email/confirmed.html'
 
-SECURE_SSL_REDIRECT = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+# SECURE_SSL_REDIRECT = True
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
 GRAPHENE = {
     "SCHEMA": "graphqlAPI.schema.schema"

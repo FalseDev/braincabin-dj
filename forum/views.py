@@ -10,7 +10,6 @@ from . import forms
 
 class QuestionListView(ListView):
     model = Question
-    template_name = 'forum/questions.html'
     context_object_name = 'questions'
     paginate_by = 5
     ordering = '-asked_on'
@@ -53,7 +52,7 @@ def create_answer(request, question_id):
     else:
         form = forms.AnswerCreationForm()
         question = get_object_or_404(Question, id=question_id)
-    return render(request, 'forum/answer.html', {"form": form, "question": question})
+    return render(request, 'forum/add_answer.html', {"form": form, "question": question})
 
 
 def vote(request, model_type, vote_type, action_type, pk):

@@ -1,0 +1,70 @@
+{% load user_voted %}
+
+<div class="card mt-4 border-primary">
+    <div class="card-header">{{ object.title }}</div>
+
+    <div class="card-body" id="target">
+        {{ object.description|linebreaksbr }}
+    </div>
+
+    <div class="card-footer d-flex">
+        <div class="mr-auto">
+            <span id="q-u-{{ object.pk }}">{{ object.upvotes.count }}</span>
+            <button
+                class="btn pt-0 pb-0"
+                onclick="vote(this)"
+                data-vote="upvote"
+                data-object="question"
+                data-action="{{ object|user_upvoted_action:user }}"
+                data-counter="q-u-{{ object.pk }}"
+                data-pk="{{object.pk}}"
+                style="color:{{ object|user_upvoted_color:user }}"
+            >
+                <svg
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 16 16"
+                    class="bi bi-arrow-up"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"
+                    />
+                </svg>
+            </button>
+            <span id="q-d-{{ object.pk }}">{{ object.downvotes.count }}</span>
+            <button
+                class="btn pt-0 pb-0"
+                onclick="vote(this)"
+                data-vote="downvote"
+                data-object="question"
+                data-action="{{ object|user_downvoted_action:user }}"
+                data-counter="q-d-{{ object.pk }}"
+                data-pk="{{object.pk}}"
+                style="color:{{ object|user_downvoted_color:user }}"
+            >
+                <svg
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 16 16"
+                    class="bi bi-arrow-down"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"
+                    />
+                </svg>
+            </button>
+        </div>
+        <div class="ml-auto">
+            <span class="text-muted">Asked by: </span>
+            <a href="#" class="link">{{ object.asked_by.username }}</a>
+            <span class="text-muted"> On </span>
+            {{ object.asked_on }}
+        </div>
+    </div>
+</div>

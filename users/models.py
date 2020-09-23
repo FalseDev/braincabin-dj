@@ -27,8 +27,8 @@ class Profile(models.Model):
         (OTHER, "OTH"),
     ]
 
-    status = models.CharField(choices=status_choices, max_length=9)
-    institute = models.CharField(max_length=30)
+    status = models.CharField(choices=status_choices, max_length=9, null=True)
+    institute = models.CharField(max_length=30, null=True)
 
     def __str__(self):
         return f"{self.user.username}'s profile"

@@ -8,7 +8,6 @@ class AnswerType(DjangoObjectType):
     class Meta:
         model = Answer
         fields = ("text", "question", "answered_by",
-                  "upvote_count", "downvote_count",
                   "answered_on")
 
 
@@ -21,8 +20,7 @@ class ProfileType(DjangoObjectType):
 class QuestionType(DjangoObjectType):
     class Meta:
         model = Question
-        fields = ("id", "title", "description", "upvote_count",
-                  "downvote_count", "answer_count", "asked_by",
+        fields = ("id", "title", "description", "asked_by",
                   "asked_on")
     answers = List(AnswerType)
     def resolve_answers(self,info):
@@ -38,7 +36,7 @@ class UserType(DjangoObjectType):
     top_answers = List(AnswerType)
 
     def resolve_top_questions(self, info):
-        return self.question_set.order_by('upvote_count')[:5]
+        return self.question_set.filter(asked_by=info.context.user)[:5]
 
     def resolve_top_answers(self, info):
-        return self.answer_set.order_by('upvote_count')[:5]
+        return self.answer_set.filter(answered_by=info.context.user)[:5]

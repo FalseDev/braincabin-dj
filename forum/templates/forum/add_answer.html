@@ -1,11 +1,27 @@
 {% extends 'base.html' %}
 {% load crispy_forms_filters %}
 
-{% block title %}Braincabin Forum - Ask{% endblock title %}
+{% block title %}Braincabin Forum - Add Answer{% endblock title %}
 
     {% block content %}
         <div class="container mt-4">
-            <form method="post">
+
+            <div class="card mt-4 border-primary">
+                <div class="card-header">
+                    <span class="text-muted">Asked by: </span>
+                    <a href="#" class="link">{{ question.asked_by.username }}</a>
+                    <span class="text-muted"> On </span>
+                    {{ question.asked_on }}
+                </div>
+                <div class="card-title nav-link mt-3">
+                    {{ question.title }}
+                </div>
+                <div class="card-body" id="question">
+                    {{ question.description|linebreaksbr }}
+                </div>
+            </div>
+
+            <form method="post" class="mt-4">
                 {% csrf_token %}
                 <div class="form-group">
                     {{form|crispy}}
@@ -18,7 +34,7 @@
 
                 <div class="form-group">
                     <button class="btn btn-block btn-outline-primary" type="submit">
-                        Create question
+                        Answer question
                     </button>
                 </div>
             </form>
@@ -29,7 +45,7 @@
         <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
         <script defer>
             const converter = new showdown.Converter()
-            const description_box = document.getElementById('id_description')
+            const description_box = document.getElementById('id_text')
             const target = document.getElementById('target')
             const defaultText = "<span class=\"text-muted\">Start typing to see the output!</span>"
 
@@ -45,6 +61,10 @@
             
             description_box.addEventListener('input', updateOutput)
             updateOutput()
+            
+            question = document.getElementById('question')
+            question.innerHTML = converter.makeHtml(question.innerText)
+
         </script>
 
     {% endblock content %}

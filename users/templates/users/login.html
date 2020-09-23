@@ -1,13 +1,32 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+
+{% block title %}Braincabin - Login{% endblock title %}
+
 {% block content %}
-    <div class="container mt-4">
-        <legend>Login into BrainCabin</legend>
-        <form method="post" class="form-group">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <button type="submit" class="btn btn-outline-info btn-block">Login</button>
-        </form>
+    <div class="container d-flex justify-content-center">
+        <div class="mt-4 col-sm-10 col-md-6 col-lg-4">
+            <legend>Login into BrainCabin</legend>
+            <hr>
+            <form method="post" class="form-group">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-outline-info btn-block">Login</button>
+            </form>
+
+            <div class="small d-flex flex-column">
+                <div class="flex-nowrap">
+                    Forgot password? 
+                    <a class="link text-muted" href="{% url 'password_reset' %}">Reset here</a><br>
+                </div>
+                
+                <div class="flex-nowrap">
+                    Don't have an account?
+                    <a class="link text-muted" href="{% url 'register' %}"> Register</a>
+                </div>
+            </div>
+
+        </div>
     </div>
 
 {% endblock content %}

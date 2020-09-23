@@ -2,103 +2,23 @@
 {% load static %}
 {% load user_voted %}
 {% load crispy_forms_filters %}
+
+{% block title %}{{object.title|truncatechars:20}}{% endblock title %}
+
+
     {% block content %}
         <div class="container mt-4">
             
-            <div class="card mt-4 border-primary">
-                <div class="card-header">
-                    {{ object.title }}
-                </div>
-                <div class="card-body" id="target">
-                    {{ object.description|linebreaksbr }}
-                </div>
-                <div class="card-footer d-flex">
-                    <div class="mr-auto">
-                        <span id="q-u-{{ object.pk }}">{{ object.upvotes.count }}</span>
-                        <button class="btn pt-0 pb-0"
-                            onclick="vote(this)"
-                            data-vote="upvote"
-                            data-object="question"
-                            data-action="{{ object|user_upvoted_action:user }}"
-                            data-counter="q-u-{{ object.pk }}"
-                            data-pk="{{object.pk}}"
-                            style="color:{{ object|user_upvoted_color:user }}">
-
-                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
-                            </svg>
-
-                        </button>
-                        <span id="q-d-{{ object.pk }}">{{ object.downvotes.count }}</span>
-                        <button class="btn pt-0 pb-0"
-                            onclick="vote(this)"
-                            data-vote="downvote"
-                            data-object="question"
-                            data-action="{{ object|user_downvoted_action:user }}"
-                            data-counter="q-d-{{ object.pk }}"
-                            data-pk="{{object.pk}}"
-                            style="color:{{ object|user_downvoted_color:user }}">
-                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="ml-auto">
-                            <span class="text-muted">Asked by: </span>
-                            <a href="#" class="link">{{ object.asked_by.username }}</a>
-                            <span class="text-muted"> On </span>
-                            {{ object.asked_on }}
-                    </div>
-            </div>
-
-            </div>
-
-            {% for answer in object.answer_set.all %}
-                <div class="card mt-4 border-secondary">
-                    <div class="card-body" id="answer-{{ forloop.counter0 }}">
-                        {{ answer.text|linebreaksbr }}
-                    </div>
-                    <div class="card-footer d-flex">
-                        <div class="mr-auto">
-                            <span id="a-u-{{ answer.pk }}">{{ answer.upvotes.count }}</span>
-                            <button class="btn pt-0 pb-0"
-                            onclick="vote(this)"
-                            data-vote="upvote"
-                            data-object="answer"
-                            data-action="{{ answer|user_upvoted_action:user }}"
-                            data-counter="a-u-{{ answer.pk }}"
-                            data-pk="{{answer.pk}}"
-                            style="color:{{ answer|user_upvoted_color:user }}">
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
-                                </svg>
-                            </button>
-                            <span id="a-d-{{ answer.pk }}">{{ answer.downvotes.count }}</span>
-                            <button class="btn pt-0 pb-0"
-                            onclick="vote(this)"
-                            data-vote="downvote"
-                            data-object="answer"
-                            data-action="{{ answer|user_downvoted_action:user }}"
-                            data-counter="a-d-{{ answer.pk }}"
-                            data-pk="{{answer.pk}}"
-                            style="color:{{ answer|user_downvoted_color:user }}">
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="ml-auto">
-                            <span class="text-muted">Answered by: </span>
-                            <a href="#">{{ answer.answered_by.username }}</a>
-                            <span class="text-muted"> on {{ answer.answered_on }}</span>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
+            {% include "forum/question.html" %}
 
             <a class="btn btn-primary mt-4 mb-4 ml-1" href="{% url 'answer-create' object.pk %}">
-                Add another answer
+                Add answer
             </a>
+
+            {% for answer in object.answer_set.all %}
+                {% include "forum/answer.html" %}
+            {% endfor %}
+
         </div>
 
         <!-- Showdown JS Config -->

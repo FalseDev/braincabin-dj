@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+    {% block title %}Braincabin - Users{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="row">
+        {% for object in object_list %}
+
+            <div class="col-lg-6 col-xl-4 col-sm-10">
+                <div class="card mt-3 mb-3">
+                <div class="card-header">{{ object.username }}</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ object.name }}</h5>
+                    <p class="card-text">
+
+                        Reputation: {{ object.reputation }}<br />
+                        {% if object.profile.status %}
+                            Current status: {{ object.profile.status|lower|capfirst }}<br />
+                        {% endif %}
+
+                        {% if object.profile.institute %}
+                            Current institute: {{ object.profile.institute|capfirst }}
+                        {% endif %}
+
+                    </p>
+                </div>
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+    {% include "pagination.html" %}
+
+</div>
+
+{% endblock content %}
