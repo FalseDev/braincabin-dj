@@ -6,6 +6,14 @@
 {% load user_voted %}
     <div class="container mt-4">
         <main>
+
+        <div class="card border-primary">
+            <div class="card-body">
+                Have a question?
+                <a href="{% url 'question-create' %}" class="btn btn-primary">Ask</a>
+            </div>
+        </div>
+        
             {% if questions %}
                 {% for question in questions %}
                     <div class="card mt-4">

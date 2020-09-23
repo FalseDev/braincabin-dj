@@ -9,7 +9,7 @@ except KeyError:
 try:
     DATABASE_NAME = os.environ['DATABASE_NAME']
 except KeyError:
-    DATABASE_NAME = os.path.join(Path(__file__).resolve().parent.parent, 'sqlite3')
+    DATABASE_NAME = os.path.join(Path(__file__).resolve().parent.parent.parent, 'sqlite3')
 
 try:
     DATABASE_USER = os.environ['DATABASE_USER']
