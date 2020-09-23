@@ -1,3 +1,5 @@
+let requesting = false
+
 interface VoteResponseData {
     success: boolean
     errors?: string[]
@@ -26,6 +28,9 @@ const getVoteOptions = (element: HTMLButtonElement): IVoteOptions => {
 
 
 const vote = async (clickedElement: HTMLButtonElement) => {
+    if(requesting) return null
+
+    requesting = true
 
     const updateCountValues = (inverseButton: HTMLButtonElement) => {
         const counterElementID = clickedElement.getAttribute('data-counter')
@@ -72,5 +77,7 @@ const vote = async (clickedElement: HTMLButtonElement) => {
     else {
         alert(resData.errors![0])
     }
+
+    requesting = false
 }
 
