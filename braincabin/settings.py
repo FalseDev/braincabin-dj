@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_bleach',
+    'ckeditor',
     'graphene_django',
     'crispy_forms',
     'django_email_verification',
@@ -162,6 +164,14 @@ EMAIL_ACTIVE_FIELD = 'is_active'
 EMAIL_MAIL_SUBJECT = 'Confirm your email to activate your braincabin account'
 EMAIL_MAIL_HTML = 'users/email/confirmation_email.html'
 EMAIL_PAGE_TEMPLATE = 'users/email/confirmed.html'
+
+# Bleach configuration
+BLEACH_ALLOWED_TAGS = ['p', 'b', 'i', 'u', 'em', 'strong', 'a', 'br', 's']
+BLEACH_ALLOWED_ATTRIBUTES = ['href', 'title', 'style']
+BLEACH_ALLOWED_STYLES = ['font-family', 'font-weight', 'text-decoration', 'font-variant']
+BLEACH_STRIP_TAGS = True
+BLEACH_STRIP_COMMENTS = False
+BLEACH_DEFAULT_WIDGET = 'ckeditor.widgets.CKEditorWidget'
 
 # SECURE_SSL_REDIRECT = True
 # CSRF_COOKIE_SECURE = True

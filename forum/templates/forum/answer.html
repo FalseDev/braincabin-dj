@@ -1,7 +1,10 @@
 {% load user_voted %}
+{% load bleach_tags %}
+{% load markdown_tags %}
+
 <div class="card mt-4 border-secondary">
     <div class="card-body" id="answer-{{ forloop.counter0 }}">
-        {{ answer.text|linebreaksbr }}
+        {{ answer.text|bleach|convert_markdown|safe }}
     </div>
     <div class="card-footer d-flex">
         <div class="mr-auto">

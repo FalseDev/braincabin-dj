@@ -21,24 +21,6 @@
 
         </div>
 
-        <!-- Showdown JS Config -->
-        <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
-        <script defer>
-            const converter = new showdown.Converter()
-            processMarkdown('target')
-
-            for (let i = 0; i < {{ object.answer_set.all|length }};i++){
-                processMarkdown('answer-' + i.toString())
-            }
-            
-            async function processMarkdown (targetID){
-                const target = document.getElementById(targetID)
-                const html = converter.makeHtml(target.innerText)
-                const onlyText = html
-                target.innerHTML = onlyText
-            }
-
-        </script>
         <script src="{% static 'forum/ajax-vote.js' %}"></script>
 
     {% endblock content %}

@@ -1,22 +1,29 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
+from django.db.models import Count
 
 
 class User(AbstractUser):
     name = models.CharField(max_length=30)
 
-    reputation = models.IntegerField('Reputation of user', default=0)
     join_date = models.DateField(auto_now_add=True)
     date_of_birth = models.DateField()
 
     REQUIRED_FIELDS = ['date_of_birth', 'name', 'email']
 
+    def reputation(self):
+        questions = self.question_set.annotate(score=(Count('upvotes')-Count('downvotes')))
+        answers = self.answer_set.annotate(score=(Count('upvotes')-Count('downvotes')))
+        question_score = sum([q.score for q in questions])
+        answer_score = sum([q.score for q in answers])
+        return answer_score + question_score
+    
     def top_questions(self, amount=5):
-        return self.question_set.order_by('upvotes')[:amount]
+        return self.question_set.annotate(score=(Count('upvotes')-Count('downvotes'))).order_by('-score')[:amount]
 
     def top_answers(self, amount=5):
-        return self.answer_set.order_by('upvotes')[:amount]
+        return self.answer_set.annotate(score=(Count('upvotes')-Count('downvotes'))).order_by('-score')[:amount]
 
     def get_absolute_url(self):
         return reverse("user-detail", kwargs={"pk": self.pk})
@@ -29,17 +36,19 @@ class Profile(models.Model):
     SCHOOLER = "SCHOOLER"
     UNDERGRAD = "UNDERGRAD"
     GRADUATE = "GRADUATE"
+    TEACHER = "TEACHER"
     OTHER = "OTHER"
 
     status_choices = [
-        (SCHOOLER, "SCH"),
-        (UNDERGRAD, "UGD"),
-        (GRADUATE, "GDE"),
-        (OTHER, "OTH"),
+        (SCHOOLER, SCHOOLER),
+        (UNDERGRAD, UNDERGRAD),
+        (GRADUATE, GRADUATE),
+        (TEACHER, TEACHER),
+        (OTHER, OTHER),
     ]
 
-    status = models.CharField(choices=status_choices, max_length=9, null=True)
-    institute = models.CharField(max_length=30, null=True)
+    status = models.CharField(choices=status_choices, max_length=9, null=True, blank=True)
+    institute = models.CharField(max_length=30, null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.username}'s profile"

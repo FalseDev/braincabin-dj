@@ -4,6 +4,7 @@ from django.views.generic import ListView, CreateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.forms import Textarea
 from django.contrib import messages
+from ckeditor.widgets import CKEditorWidget
 from .models import Question, Answer
 from . import forms
 
@@ -25,7 +26,7 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
 
     def get_form(self, form_class=None):
         form = super(QuestionCreateView, self).get_form(form_class=form_class)
-        form.fields['description'].widget = Textarea({
+        form.fields['description'].widget = CKEditorWidget({
             "placeholder": "Explain your question here!",
         })
         return form
@@ -74,11 +75,6 @@ def vote(request, model_type, vote_type, action_type, pk):
     except:
         return JsonResponse({"success":False,"errors":["Invalid object id"]})
 
-    if model_type == 'question':
-        reputed_user = op_object.asked_by
-    else:
-        reputed_user = op_object.answered_by
-
     if vote_type == 'downvote':
         vote_obj = op_object.downvotes
         unvote_obj = op_object.upvotes
@@ -91,30 +87,15 @@ def vote(request, model_type, vote_type, action_type, pk):
     if action_type == 'add':
         if unvote_obj.filter(pk=request.user.pk):
             unvote_obj.remove(request.user)
-            if vote_type=='downvote':
-                reputed_user.reputation -= 1
-            else:
-                reputed_user.reputation += 1
-            reputed_user.save()
         
         if not vote_obj.filter(pk=request.user.pk):
             vote_obj.add(request.user)
-            if vote_type=='downvote':
-                reputed_user.reputation -= 1
-            else:
-                reputed_user.reputation += 1
-            reputed_user.save()
         else:
             return JsonResponse({"success":False})
 
     elif action_type == 'remove':
         unvote_obj.remove(request.user)
         vote_obj.remove(request.user)
-        if vote_type == 'downvote':
-            reputed_user.reputation+=1
-        else:
-            reputed_user.reputation-=1
-        reputed_user.save()
     else:
         return JsonResponse({"success":False,"errors":["Invalid action type"]})
 
