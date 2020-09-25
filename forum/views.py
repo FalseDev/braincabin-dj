@@ -75,6 +75,9 @@ def vote(request, model_type, vote_type, action_type, pk):
     except:
         return JsonResponse({"success":False,"errors":["Invalid object id"]})
 
+    if (model == Question and op_object.asked_by == request.user) or (model == Answer and op_object.answered_by == request.user):
+        return JsonResponse({"success":False,"errors":[f"You cannot {vote_type} your own {model_type}"]})
+
     if vote_type == 'downvote':
         vote_obj = op_object.downvotes
         unvote_obj = op_object.upvotes
@@ -87,7 +90,7 @@ def vote(request, model_type, vote_type, action_type, pk):
     if action_type == 'add':
         if unvote_obj.filter(pk=request.user.pk):
             unvote_obj.remove(request.user)
-        
+
         if not vote_obj.filter(pk=request.user.pk):
             vote_obj.add(request.user)
         else:
