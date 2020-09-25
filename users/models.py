@@ -40,11 +40,11 @@ class Profile(models.Model):
     OTHER = "OTHER"
 
     status_choices = [
-        (SCHOOLER, SCHOOLER),
-        (UNDERGRAD, UNDERGRAD),
-        (GRADUATE, GRADUATE),
-        (TEACHER, TEACHER),
-        (OTHER, OTHER),
+        (SCHOOLER, SCHOOLER.capitalize()),
+        (UNDERGRAD, UNDERGRAD.capitalize()),
+        (GRADUATE, GRADUATE.capitalize()),
+        (TEACHER, TEACHER.capitalize()),
+        (OTHER, OTHER.capitalize()),
     ]
 
     status = models.CharField(choices=status_choices, max_length=9, null=True, blank=True)
