@@ -67,7 +67,11 @@
 
                 </ul>
                 <span style="color: white">
-                    {% if request.user.is_authenticated %} Hello, {{ request.user.name }} {% endif %}
+                    {% if request.user.is_authenticated %} Hello, 
+                        <a style="color: white" href="{{request.user.get_absolute_url}}">
+                            {{ request.user.name }}
+                        </a>
+                    {% endif %}
                 </span>
             </div>
         </nav>

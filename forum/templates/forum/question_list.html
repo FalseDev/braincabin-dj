@@ -40,7 +40,7 @@
 
                             <div class="ml-auto">
                                 <span class="text-muted">Asked by: </span>
-                                <a href="#" class="link">{{ question.asked_by.username }}</a>
+                                <a href="{{question.asked_by.get_absolute_url}}" class="link">{{ question.asked_by.username }}</a>
                                 <span class="text-muted"> On </span>
                                 {{ question.asked_on }}
                             </div>

@@ -37,7 +37,7 @@
         </div>
         <div class="ml-auto">
             <span class="text-muted">Answered by: </span>
-            <a href="#">{{ answer.answered_by.username }}</a>
+            <a href="{{answer.answered_by.get_absolute_url}}">{{ answer.answered_by.username }}</a>
             <span class="text-muted"> on {{ answer.answered_on }}</span>
         </div>
     </div>
