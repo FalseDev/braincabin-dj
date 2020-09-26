@@ -6,9 +6,9 @@ from users.models import User
 
 def resolve_register(root, info, name, username, email, password, date_of_birth):
     if (User.objects.filter(username=username)):
-      return None
+        return None
     if (User.objects.filter(email=email)):
-      return None
+        return None
     return User.objects.create_user(username, email=email, password=password, name=name, date_of_birth=date_of_birth)
 
 
@@ -26,21 +26,20 @@ def resolve_logout(root, info):
 def resolve_question(root, info, id):
     question = Question.objects.filter(id=id)
     if question:
-      return question[0]
+        return question[0]
     return None
 
 
 def resolve_user(root, info, id):
     user = User.objects.filter(id=id)
     if(user):
-      return user[0]
+        return user[0]
     return None
 
 
-def resolve_all_questions(root, info, page=1, quantity=5):
-    return Question.objects.all()[(page-1)*quantity:page*quantity]
+def resolve_all_questions(root, info, limit=10, offset=0):
+    return Question.objects.all()[offset:offset+limit]
 
 
-def resolve_all_profiles(root, info, page=1, quantity=5):
-    return Profile.objects.all()[(page-1)*quantity:page*quantity]
-
+def resolve_users(root, info, limit=10, offset=0):
+    return User.objects.all()[offset:offset+limit]

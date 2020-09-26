@@ -4,18 +4,20 @@ from graphqlAPI import typeDefs
 
 
 class Query(ObjectType):
-    all_questions = Field(List(typeDefs.QuestionType),
-                          page=Int(required=False))
-    all_profiles = Field(List(typeDefs.ProfileType), page=Int(required=False))
+    questions = Field(List(typeDefs.QuestionType),
+                      limit=Int(required=False), offset=Int(required=False))
+    users = Field(List(typeDefs.UserType),
+                  limit=Int(required=False), offset=Int(required=False))
 
     question = Field(typeDefs.QuestionType, id=Int(required=True))
     user = Field(typeDefs.UserType, id=Int(required=True))
 
-    resolve_all_questions = resolvers.resolve_all_questions
-    resolve_all_profiles = resolvers.resolve_all_profiles
+    resolve_questions = resolvers.resolve_all_questions
+    resolve_users = resolvers.resolve_users
 
     resolve_question = resolvers.resolve_question
     resolve_user = resolvers.resolve_user
+
 
 class Mutation(ObjectType):
     register = Field(typeDefs.UserType, name=String(required=True), username=String(

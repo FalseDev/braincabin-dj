@@ -3,6 +3,7 @@ from users.models import User
 from django.urls import reverse
 from django_bleach.models import BleachField
 
+
 class Question(models.Model):
     title = models.CharField(max_length=30)
     description = BleachField(max_length=2000)
@@ -15,12 +16,15 @@ class Question(models.Model):
     downvotes = models.ManyToManyField(
         User, related_name='ans_downvote', blank=True)
 
+    def get_score(self):
+        return self.upvotes.count() - self.downvotes.count()
+
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse("question-detail", kwargs={"pk": self.pk})
-    
+
 
 
 class Answer(models.Model):
@@ -35,6 +39,9 @@ class Answer(models.Model):
     downvotes = models.ManyToManyField(
         User, related_name='que_downvote', blank=True)
     accepted = models.BooleanField(default=False)
+
+    def get_score(self):
+        return self.upvotes.count() - self.downvotes.count()
 
     def __str__(self):
         return f"{self.text[0:10]}{'...' if len(self.text)>10 else ''}"
