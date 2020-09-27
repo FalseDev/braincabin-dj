@@ -16,10 +16,10 @@ class Question(models.Model):
     downvotes = models.ManyToManyField(
         User, related_name='ans_downvote', blank=True)
 
-    accepted_answer = models.OneToOneField('Answer', null=True, on_delete=models.CASCADE, related_name="accepted_for_question")
+    accepted_answer = models.OneToOneField('Answer', null=True, on_delete=models.CASCADE, related_name="accepted_for_question", blank=True)
 
     def get_score(self):
-        return self.upvotes.count() - self.downvotes.count()
+        return self.upvotes.count() - (2 * self.downvotes.count())
 
     def __str__(self):
         return self.title
@@ -42,7 +42,7 @@ class Answer(models.Model):
         User, related_name='que_downvote', blank=True)
 
     def get_score(self):
-        return self.upvotes.count() - self.downvotes.count()
+        return self.upvotes.count() - (2 * self.downvotes.count())
 
     def __str__(self):
         return f"{self.text[0:10]}{'...' if len(self.text)>10 else ''}"

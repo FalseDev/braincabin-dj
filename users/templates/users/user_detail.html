@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-
+{% load markdown_tags %}
+{% load bleach_tags %}
 {% block title %}{{object.username}} @ Braincabin{% endblock title %}
 
 {% block content %}
@@ -48,10 +49,11 @@
                         {% if questions %}
                             <ul class="list-group list-group-flush">
                                 {% for question in questions %}
-                                    <li class="list-group-item">
+                                    <li class="list-group-item d-flex justify-content-between">
                                         <a href="{{question.get_absolute_url}}">
                                             {{question.title|truncatechars:30}}
                                         </a>
+                                        <span class="text-muted">{{question.get_score}}</span>
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -71,10 +73,11 @@
                         {% if answers %}
                             <ul class="list-group list-group-flush">
                                 {% for answer in answers %}
-                                    <li class="list-group-item">
+                                    <li class="list-group-item d-flex justify-content-between">
                                         <a href="{{answer.question.get_absolute_url}}">
-                                            {{answer.question.title|truncatechars:30}}
+                                            {{answer.text|convert_markdown|bleach:''|truncatechars:30}}
                                         </a>
+                                        <span class="{% if answer == answer.question.accepted_answer %}text-success{% else %}text-muted{% endif %}">{{ answer.get_score }}</span>
                                     </li>
                                 {% endfor %}
                             </ul>
