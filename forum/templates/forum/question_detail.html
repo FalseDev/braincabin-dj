@@ -21,6 +21,10 @@
 
         </div>
 
+        {% if object.accepted_answer is None and request.user == object.asked_by %}
+            <script src="{% static 'forum/answer-accept.js' %}" defer></script>
+        {% endif %}
+
         <script src="{% static 'forum/ajax-vote.js' %}"></script>
 
     {% endblock content %}

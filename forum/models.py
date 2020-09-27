@@ -16,6 +16,8 @@ class Question(models.Model):
     downvotes = models.ManyToManyField(
         User, related_name='ans_downvote', blank=True)
 
+    accepted_answer = models.OneToOneField('Answer', null=True, on_delete=models.CASCADE, related_name="accepted_for_question")
+
     def get_score(self):
         return self.upvotes.count() - self.downvotes.count()
 
@@ -38,7 +40,6 @@ class Answer(models.Model):
         User, related_name='que_upvote', blank=True)
     downvotes = models.ManyToManyField(
         User, related_name='que_downvote', blank=True)
-    accepted = models.BooleanField(default=False)
 
     def get_score(self):
         return self.upvotes.count() - self.downvotes.count()
