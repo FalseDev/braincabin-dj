@@ -6,6 +6,10 @@
 
     <div class="card-body" id="target">
         {{ object.description|bleach|convert_markdown|safe }}
+
+        {% for tag in object.tags.all %}
+            <span class="badge badge-secondary">{{ tag.name }}</span>
+        {% endfor %}
     </div>
 
     <div class="card-footer d-flex">

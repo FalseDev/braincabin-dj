@@ -6,7 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.forms import Textarea
 from django.contrib import messages
 from ckeditor.widgets import CKEditorWidget
-from .models import Question, Answer
+import json
+from .models import Question, Answer, QuestionTag
 from . import forms
 
 
@@ -21,20 +22,36 @@ class QuestionDetailView(DetailView):
     model = Question
 
 
-class QuestionCreateView(LoginRequiredMixin, CreateView):
-    model = Question
-    fields = ['title', 'description']
+def question_tags_json(request):
+    tags = [{"value": tag.name, "ref": tag.ref}
+            for tag in QuestionTag.objects.all()]
+    return JsonResponse({"tags": tags})
 
-    def get_form(self, form_class=None):
-        form = super(QuestionCreateView, self).get_form(form_class=form_class)
-        form.fields['description'].widget = CKEditorWidget({
-            "placeholder": "Explain your question here!",
-        })
-        return form
 
-    def form_valid(self, form):
-        form.instance.asked_by = self.request.user
-        return super().form_valid(form)
+@login_required
+def create_question(request):
+    if request.method == 'POST':
+        form = forms.QuestionCreationForm(request.POST)
+        if form.is_valid():
+            description = form.cleaned_data['description']
+            title = form.cleaned_data['title']
+            question = Question.objects.create(
+                title=title, description=description,
+                asked_by=request.user)
+            try:
+                tagObjects = json.loads(form.data['tags'])
+            except:
+                pass
+            else:
+                tags = [QuestionTag.objects.get(ref=tagref) for tagref in [
+                    tag['ref'] for tag in tagObjects]]
+                question.tags.set(tags)
+
+            messages.success(request, 'Question asked!')
+            return redirect('question-detail', pk=question.id)
+    else:
+        form = forms.QuestionCreationForm()
+    return render(request, 'forum/question_form.html', {"form": form})
 
 
 @login_required

@@ -25,6 +25,13 @@
                         </a>
                         <div class="card-body" id="question-{{ forloop.counter0 }}">
                             {{ question.description|convert_markdown|bleach:''|truncatechars:250 }}
+                            {% if question.tags.all %}
+                                <br>
+                            {% endif %}
+                            {% for tag in question.tags.all %}
+                                <span class="badge badge-secondary">{{ tag.name }}</span>
+                            {% endfor %}
+
                         </div>
                         <div class="card-footer d-flex">
                             <div class="mr-auto">

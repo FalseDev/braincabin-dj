@@ -17,6 +17,7 @@ class Question(models.Model):
         User, related_name='ans_downvote', blank=True)
 
     accepted_answer = models.OneToOneField('Answer', null=True, on_delete=models.CASCADE, related_name="accepted_for_question", blank=True)
+    tags = models.ManyToManyField('QuestionTag', blank=True, related_name='questions')
 
     def get_score(self):
         return self.upvotes.count() - (2 * self.downvotes.count())
@@ -27,6 +28,17 @@ class Question(models.Model):
     def get_absolute_url(self):
         return reverse("question-detail", kwargs={"pk": self.pk})
 
+
+class QuestionTag(models.Model):
+    name = models.CharField(max_length=30)
+    description = models.TextField(max_length=200)
+    ref = models.IntegerField(unique=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse("tagged-question", kwargs={"pk": self.pk})
 
 
 class Answer(models.Model):
@@ -46,3 +58,6 @@ class Answer(models.Model):
 
     def __str__(self):
         return f"{self.text[0:10]}{'...' if len(self.text)>10 else ''}"
+
+    def get_absolute_url(self):
+        return reverse("question-detail", kwargs={"pk": self.question.pk}) + f'#answer{self.pk}'

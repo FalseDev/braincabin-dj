@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_filters %}
+{% load static %}
 
 {% block title %}Braincabin Forum - Ask{% endblock title %}
 
@@ -10,9 +11,46 @@
                 <form method="post">
                     {% csrf_token %}
                     <div class="form-group">
-                        {{form|crispy}}
+                        {{form.title|as_crispy_field}}
+                        <label for="tags-input">Tags</label>
+                        <input type="text" id="tags-input" name="tags"><br>
+                        {{form.description|as_crispy_field}}
                         {{form.media}}
                     </div>
+
+                    <script
+                        src="https://cdn.jsdelivr.net/npm/@yaireo/tagify@3.19.1/dist/tagify.min.js">
+                    </script>
+                    
+                    <link rel="stylesheet"
+                        href="https://cdnjs.cloudflare.com/ajax/libs/tagify/3.19.1/tagify.min.css"
+                        integrity="sha512-JSnc8OccGJ+BY4YYdZ1oHNgZlxPMVbmTjKPc3SEyvAnqM5mopiIW1bdmYmWx/RQvo9VbFOHfDrXOxCXv1AyLTA=="
+                        crossorigin="anonymous"
+                    />
+
+                    <script>
+                        const initTags = async() => {
+
+                            const res = await fetch('/forum/questiontags.json')
+                            const tags = (await res.json()).tags
+
+                            let target = document.querySelector('#tags-input')
+                            let tagify = new Tagify(target,{
+                                whitelist : tags,
+                                enforceWhitelist:true,
+                                dropdown : {
+                                    enabled : 1,
+                                    maxItems : 5,
+                                    position : "text",
+                                    closeOnSelect : true,
+                                    highlightFirst : true
+                                },
+                                maxTags: 5,
+                                backspace: true,
+                            })
+                        }
+                        initTags()
+                    </script>
 
                     <div class="form-group">
                         <button class="btn btn-outline-primary" type="submit">
