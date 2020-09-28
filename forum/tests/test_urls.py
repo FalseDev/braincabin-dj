@@ -21,7 +21,7 @@ class TestForumUrls(SimpleTestCase):
         url = reverse('question-create')
         view = resolve(url)
 
-        self.assertEqual(view.func.view_class, forum_views.QuestionCreateView)
+        self.assertEqual(view.func, forum_views.create_question)
 
     def test_answer_create_url_resolves(self):
         url = reverse('answer-create', args=[1])
