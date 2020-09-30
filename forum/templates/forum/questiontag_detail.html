@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ object.name }} Tag @ Braincabin Forum{% endblock title %}
+
+{% block content %}
+
+<div class="container my-4">
+    <div class="jumbotron">
+    <h1 class="display-4">{{object.name}}</h1>
+    <p class="lead">{{ object.description }}</p>
+    </div>
+</div>
+
+{% with page_obj.object_list as questions %}
+    <div class="container">
+        {% include 'forum/question_list_base.html' %}
+        {% include 'pagination.html' %}
+    </div>
+{% endwith %}
+
+{% endblock content %}

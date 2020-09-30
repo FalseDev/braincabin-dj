@@ -1,0 +1,45 @@
+{% load markdown_tags %}
+{% load bleach_tags %}
+{% load user_voted %}
+
+{% if questions %}
+    {% for question in questions %}
+        <div class="card mt-4">
+            <a class="card-header" 
+                href="{% url 'question-detail' question.pk %}">
+                {{ question.title }}
+            </a>
+            <div class="card-body" id="question-{{ forloop.counter0 }}">
+                {{ question.description|convert_markdown|bleach:''|truncatechars:250 }}
+                {% if question.tags.all %}
+                    <br>
+                {% endif %}
+                {% for tag in question.tags.all %}
+                    <span class="badge badge-secondary">{{ tag.name }}</span>
+                {% endfor %}
+
+            </div>
+            <div class="card-footer d-flex">
+                <div class="mr-auto">
+                    {{ question.upvotes.count }}
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up" fill="{{ question|user_upvoted_color:user }}" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+                    </svg>
+                    {{ question.downvotes.count }}
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down" fill="{{ question|user_downvoted_color:user }}" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+                    </svg>
+                </div>
+
+                <div class="ml-auto">
+                    <span class="text-muted">Asked by: </span>
+                    <a href="{{question.asked_by.get_absolute_url}}" class="link">{{ question.asked_by.username }}</a>
+                    <span class="text-muted"> On </span>
+                    {{ question.asked_on }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-danger container mt-4">Sorry, no questions yet :(</div>
+{% endif %}

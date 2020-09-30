@@ -5,6 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.forms import Textarea
 from django.contrib import messages
+from django.urls import reverse_lazy
+from django.core.paginator import Paginator
 from ckeditor.widgets import CKEditorWidget
 import json
 from .models import Question, Answer, QuestionTag
@@ -22,9 +24,33 @@ class QuestionDetailView(DetailView):
     model = Question
 
 
+class RequestNewTag(LoginRequiredMixin, CreateView):
+    model = QuestionTag
+    fields = ['name', 'ref', 'description']
+
+
+class TagDetailView(DetailView):
+    model = QuestionTag
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tag = context['object']
+
+        try:
+            page_number = int(self.request.GET['page'])
+        except:
+            page_number = 1
+
+        paginator = Paginator(tag.questions.order_by('-asked_on'), 15)
+        context['page_obj'] = paginator.get_page(page_number)
+        context['is_paginated'] = tag.questions.count() > 15
+
+        return context
+
+
 def question_tags_json(request):
     tags = [{"value": tag.name, "ref": tag.ref}
-            for tag in QuestionTag.objects.all()]
+            for tag in QuestionTag.objects.filter(active=True)]
     return JsonResponse({"tags": tags})
 
 
