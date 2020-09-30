@@ -8,6 +8,6 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-RUN yarn && yarn build
+RUN yarn --cwd staticsrc && yarn --cwd staticsrc build
 
 RUN python3 manage.py collectstatic --no-input

@@ -74,7 +74,7 @@
                             <ul class="list-group list-group-flush">
                                 {% for answer in answers %}
                                     <li class="list-group-item d-flex justify-content-between">
-                                        <a href="{{answer.question.get_absolute_url}}">
+                                        <a href="{{answer.get_absolute_url}}">
                                             {{answer.text|convert_markdown|bleach:''|truncatechars:30}}
                                         </a>
                                         <span class="{% if answer == answer.question.accepted_answer %}text-success{% else %}text-muted{% endif %}">{{ answer.get_score }}</span>

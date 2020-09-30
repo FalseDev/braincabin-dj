@@ -3,6 +3,7 @@
 {% load bleach_tags %}
 {% load markdown_tags %}
 
+<a name="answer{{answer.pk}}"></a>
 <div class="card mt-4 border-secondary">
     <div class="card-body" id="answer-{{ forloop.counter0 }}">
         {{ answer.text|bleach|convert_markdown|safe }}
