@@ -7,19 +7,26 @@ from django.db.models import Count
 class User(AbstractUser):
     name = models.CharField(max_length=30)
 
+    first_name = None
+    last_name = None
+    email = models.EmailField('email address', unique=True)
+
     join_date = models.DateField(auto_now_add=True)
     date_of_birth = models.DateField()
 
     REQUIRED_FIELDS = ['date_of_birth', 'name', 'email']
 
     def reputation(self):
-        questions = self.question_set.annotate(score=(Count('upvotes')-(2 * Count('downvotes'))))
-        answers = self.answer_set.annotate(score=(Count('upvotes')-(2 * Count('downvotes'))))
+        questions = self.question_set.annotate(
+            score=(Count('upvotes')-(2 * Count('downvotes'))))
+        answers = self.answer_set.annotate(
+            score=(Count('upvotes')-(2 * Count('downvotes'))))
         question_score = sum([q.score for q in questions])
         answer_score = sum([q.score for q in answers])
-        accepted_answers_score = self.answer_set.exclude(accepted_for_question=None).count() * 15
+        accepted_answers_score = self.answer_set.exclude(
+            accepted_for_question=None).count() * 15
         return answer_score + question_score + accepted_answers_score
-    
+
     def top_questions(self, amount=5):
         return self.question_set.annotate(score=(Count('upvotes')-(2 * Count('downvotes')))).order_by('-score')[:amount]
 
@@ -28,7 +35,6 @@ class User(AbstractUser):
 
     def get_absolute_url(self):
         return reverse("user-detail", kwargs={"pk": self.pk})
-    
 
 
 class Profile(models.Model):
@@ -48,7 +54,8 @@ class Profile(models.Model):
         (OTHER, OTHER.capitalize()),
     ]
 
-    status = models.CharField(choices=status_choices, max_length=9, null=True, blank=True)
+    status = models.CharField(choices=status_choices,
+                              max_length=9, null=True, blank=True)
     institute = models.CharField(max_length=30, null=True, blank=True)
 
     def __str__(self):
