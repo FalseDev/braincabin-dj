@@ -10,6 +10,7 @@ urlpatterns = [
 
     path('tags/create/', views.RequestNewTag.as_view(), name="new-tag"),
     path('tags/<int:pk>/', views.TagDetailView.as_view(), name="tagged-question"),
+    path('tags/unapproved/', views.UnapprovedTagList.as_view(), name="approve-tag"),
 
     path('answer/accept/<int:question_pk>/<int:answer_pk>/',
          csrf_exempt(views.accept_answer), name="answer-accept"),

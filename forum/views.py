@@ -3,6 +3,8 @@ from django.http import JsonResponse, Http404, HttpResponseNotAllowed, HttpRespo
 from django.views.generic import ListView, CreateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
 from django.forms import Textarea
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -22,6 +24,11 @@ class QuestionListView(ListView):
 
 class QuestionDetailView(DetailView):
     model = Question
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['has_accepted_answer'] = context['object'].accepted_answer is None
+        return context
 
 
 class RequestNewTag(LoginRequiredMixin, CreateView):
@@ -46,6 +53,16 @@ class TagDetailView(DetailView):
         context['is_paginated'] = tag.questions.count() > 15
 
         return context
+
+
+@method_decorator(staff_member_required, name="dispatch")
+class UnapprovedTagList(ListView):
+    model = QuestionTag
+    template_name = "forum/tags/unapproved_list.html"
+    paginate_by = 15
+
+    def get_queryset(self):
+        return QuestionTag.objects.filter(active=False).order_by('pk')
 
 
 def question_tags_json(request):

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Unapproved tags - Braincabin{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% for tag in object_list %}
+            <div class="col col-sm-12 col-md-6 col-xl-4">
+                <div class="card my-4" style="height: 12em;">
+                    <div class="card-header">{{ tag.name }}</div>
+                    <div class="card-body">
+                        {{ tag.description }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% include 'pagination.html' %}
+</div>
+{% endblock content %}
