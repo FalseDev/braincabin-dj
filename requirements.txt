@@ -1,4 +1,4 @@
-Django==3.1.12
+Django==3.1.13
 django-email-verification==0.0.7
 graphene==2.1.8
 graphene-django==2.13.0
